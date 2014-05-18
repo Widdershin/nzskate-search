@@ -1,7 +1,11 @@
 $(document).ready(function() {
     $("#submit").click(function( event ) {
         event.preventDefault();
-        alert("Clicked search");
-        $("#results").append("<li>A result!</li>")
+        var results;
+        var searchData = {"query": $("#search").val()};
+
+        results = $.get("/search", searchData, function(data) {
+            $("#results").html(data)    
+        });
     });
 });
