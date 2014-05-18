@@ -29,7 +29,7 @@ class ShopPlugin(object):
 
     def search_shop(self, query):
         """Returns an array of listings for the query"""
-        query_url = self.search_url.format(query=query)
+        query_url = self.search_url.format(query=self.sanitize_query(query))
         query = PyQuery(url=query_url)
 
         results = self.parse_result_html(query(self.LISTING_QUERY))
@@ -46,6 +46,9 @@ class ShopPlugin(object):
         return listings
 
     def create_listing(self, listing_html):
+        raise NotImplemented
+
+    def sanitize_query(self, query):
         raise NotImplemented
 
 
@@ -69,6 +72,9 @@ class UltimateBoards(ShopPlugin):
         price = recursive_class_find(listing_html, "amount")[0].text
 
         return Listing(title, link, price, shop_name=self.SHOP_NAME)
+
+    def sanitize_query(self, query):
+        return query.replace(" ", "-")
 
 
 def recursive_class_find(element, search_class):
