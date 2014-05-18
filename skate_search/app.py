@@ -1,7 +1,10 @@
 from flask import Flask, render_template, request
-
+from store_plugins import UltimateBoards
+import json
 
 app = Flask(__name__)
+
+plugins = [UltimateBoards(), ]
 
 
 @app.route('/')
@@ -11,8 +14,11 @@ def homepage():
 
 @app.route('/search')
 def search():
-    print(request.data)
-    return "Heyo you searched"
+    results = []
+    for plugin in plugins:
+        results.extend(plugin.search_shop(request.args["query"]))
+
+    return json.dumps([listing.to_dict() for listing in results])
 
 if __name__ == '__main__':
     app.run(debug=True)

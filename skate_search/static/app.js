@@ -4,8 +4,15 @@ $(document).ready(function() {
         var results;
         var searchData = {"query": $("#search").val()};
 
-        results = $.get("/search", searchData, function(data) {
-            $("#results").html(data)    
+        $.getJSON("/search", searchData, function(data) {
+            $results = $("#results")
+
+            $.each(data, function(index, listing) {
+                console.log(listing)
+                $results.append('<li><a href="' + listing.url + '">' + listing.name + " - $" + listing.price + "</a></li>")
+            });
+
+            // $("#results").html(data)
         });
     });
 });
