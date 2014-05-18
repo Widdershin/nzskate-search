@@ -30,6 +30,7 @@ class ShopPlugin(object):
     def search_shop(self, query):
         """Returns an array of listings for the query"""
         query_url = self.search_url.format(query=self.sanitize_query(query))
+        print(query_url)
         query = PyQuery(url=query_url)
 
         results = self.parse_result_html(query(self.LISTING_QUERY))
@@ -56,7 +57,7 @@ class UltimateBoards(ShopPlugin):
 
     """The Shop Plugin for UB"""
 
-    search_url = "http://www.ultimateboards.co.nz/search/products/{query}"\
+    search_url = "http://www.ultimateboards.co.nz/search/products/{query}"
 
     SHOP_NAME = "UB"
     LISTING_QUERY = ".galleryImageListItem"
@@ -75,6 +76,33 @@ class UltimateBoards(ShopPlugin):
 
     def sanitize_query(self, query):
         return query.replace(" ", "-")
+
+
+class HyperRide(ShopPlugin):
+
+    """The Shop Plugin for Hyper"""
+
+    search_url = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"\
+                 "&categories=401,843,683,399,402,778,780,792,775,844,845,681"
+    SHOP_NAME = "Hyper"
+    LISTING_QUERY = ".product_item"
+
+    def create_listing(self, listing_html):
+        product_description = recursive_class_find(
+            listing_html, "product_desc")[0]
+
+        name = product_description.text_content()
+        link = "http://www.hyperride.co.nz{url}".format(
+            url=product_description.items()[0][1])
+
+        price = recursive_class_find(listing_html, "rrp")[0].text_content()
+
+        return Listing(name, link, price, shop_name=self.SHOP_NAME)
+
+    def sanitize_query(self, query):
+        print(query)
+        print(query.replace(" ", "%20"))
+        return query.replace(" ", "%20")
 
 
 def recursive_class_find(element, search_class):
