@@ -22,14 +22,13 @@ class ShopPlugin(object):
 
     """The Shop Plugin parent class"""
 
-    search_url = "http://www.example.com/search/{query}"
-
+    SEARCH_URL = "http://www.example.com/search/{query}"
     SHOP_NAME = "Default"
     LISTING_QUERY = None
 
     def search_shop(self, query):
         """Returns an array of listings for the query"""
-        query_url = self.search_url.format(query=self.sanitize_query(query))
+        query_url = self.SEARCH_URL.format(query=self.sanitize_query(query))
         print(query_url)
         query = PyQuery(url=query_url)
 
@@ -57,8 +56,7 @@ class UltimateBoards(ShopPlugin):
 
     """The Shop Plugin for UB"""
 
-    search_url = "http://www.ultimateboards.co.nz/search/products/{query}"
-
+    SEARCH_URL = "http://www.ultimateboards.co.nz/search/products/{query}"
     SHOP_NAME = "UB"
     LISTING_QUERY = ".galleryImageListItem"
 
@@ -83,7 +81,7 @@ class HyperRide(ShopPlugin):
 
     """The Shop Plugin for Hyper"""
 
-    search_url = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"
+    SEARCH_URL = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"
     SHOP_NAME = "Hyper"
     LISTING_QUERY = "#productsSection .product_item"
 
