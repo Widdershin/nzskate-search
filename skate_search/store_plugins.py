@@ -79,19 +79,20 @@ class UltimateBoards(ShopPlugin):
 
 
 class HyperRide(ShopPlugin):
-    # hyper longboard categories: 401,843,683,399,402,778,780,792,775,844,845,681
+    # longboard categories:401,843,683,399,402,778,780,792,775,844,845,681
 
     """The Shop Plugin for Hyper"""
 
     search_url = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"
     SHOP_NAME = "Hyper"
-    LISTING_QUERY = ".product_item"
+    LISTING_QUERY = "#productsSection .product_item"
 
     def create_listing(self, listing_html):
         product_description = recursive_class_find(
             listing_html, "product_desc")[0]
 
-        name = product_description.text_content()
+        name = (product_description.text_content()
+                .title().replace("Mm", "mm"))  # TODO: fix bad hack
         link = "http://www.hyperride.co.nz{url}".format(
             url=product_description.items()[0][1])
 
