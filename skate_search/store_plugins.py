@@ -26,11 +26,16 @@ class ShopPlugin(object):
     SHOP_NAME = "Default"
     LISTING_QUERY = None
 
+    def load_search_page(self, query):
+        query_url = self.SEARCH_URL.format(query=self.sanitize_query(query))
+        query = PyQuery(url=query_url)
+
+        return query
+
     def search_shop(self, query):
         """Returns an array of listings for the query"""
-        query_url = self.SEARCH_URL.format(query=self.sanitize_query(query))
-        print(query_url)
-        query = PyQuery(url=query_url)
+
+        query = self.load_search_page(query)
 
         results = self.parse_result_html(query(self.LISTING_QUERY))
 
