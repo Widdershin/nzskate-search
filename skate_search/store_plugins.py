@@ -79,11 +79,11 @@ class UltimateBoards(ShopPlugin):
 
 
 class HyperRide(ShopPlugin):
+    # hyper longboard categories: 401,843,683,399,402,778,780,792,775,844,845,681
 
     """The Shop Plugin for Hyper"""
 
-    search_url = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"\
-                 "&categories=401,843,683,399,402,778,780,792,775,844,845,681"
+    search_url = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"
     SHOP_NAME = "Hyper"
     LISTING_QUERY = ".product_item"
 
@@ -95,7 +95,7 @@ class HyperRide(ShopPlugin):
         link = "http://www.hyperride.co.nz{url}".format(
             url=product_description.items()[0][1])
 
-        price = recursive_class_find(listing_html, "rrp")[0].text_content()
+        price = recursive_class_find(listing_html, "rrp")[0].text_content()[1:]
 
         return Listing(name, link, price, shop_name=self.SHOP_NAME)
 
@@ -103,6 +103,8 @@ class HyperRide(ShopPlugin):
         print(query)
         print(query.replace(" ", "%20"))
         return query.replace(" ", "%20")
+
+    # TODO: Filter hyper results based on url
 
 
 def recursive_class_find(element, search_class):
