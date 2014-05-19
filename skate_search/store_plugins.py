@@ -138,16 +138,53 @@ class BasementSkate(ShopPlugin):
         return query.replace(" ", "+")
 
 
+class TerrabangSkate(ShopPlugin):
+
+    SEARCH_URL = "http://terrabangskate.com/catalogsearch/result/?q={query}"
+    SHOP_NAME = "Terrabang"
+
+    LISTING_QUERY = ".item"
+
+    def create_listing(self, listing_html):
+        name_el = recursive_find(listing_html, "a")
+        name = name_el.items()[1][1]
+        link = name_el.items()[0][1]
+
+        price_el = recursive_class_find(listing_html, "price")[0]
+
+        price = price_el.text_content().strip()[3:]
+        #price = "20.00"
+
+        return Listing(name, link, price, self.SHOP_NAME)
+
+    def sanitize_query(self, query):
+        return query.replace(" ", "+")
+
+
 def recursive_class_find(element, search_class):
+    return recursive_find(
+        element,
+        search_class,
+        search_func=lambda x: x.find_class)
+
+
+def recursive_find(element, search_element, search_func=None):
+    if not search_func:
+        search_func = lambda x: x.find
+
     children = element.getchildren()
 
     if not children:
         return None
 
-    find_result = element.find_class(search_class)
+    find_result = search_func(element)(search_element)
 
-    if find_result:
+    if find_result is not None:
         return find_result
 
     for child in children:
-        return recursive_class_find(child, search_class)
+        result = recursive_find(child, search_element, search_func=search_func)
+        if result:
+            return result
+
+    return None
