@@ -62,7 +62,7 @@ class UltimateBoards(ShopPlugin):
     """The Shop Plugin for UB"""
 
     SEARCH_URL = "http://www.ultimateboards.co.nz/search/products/{query}"
-    SHOP_NAME = "UB"
+    SHOP_NAME = "Ultimate Boards"
     LISTING_QUERY = ".galleryImageListItem"
 
     def create_listing(self, listing_html):
@@ -73,7 +73,8 @@ class UltimateBoards(ShopPlugin):
 
         link = title_link.items()[0][1]
 
-        price = recursive_class_find(listing_html, "amount")[0].text
+        price = "{} NZD".format(
+            recursive_class_find(listing_html, "amount")[0].text)
 
         return Listing(title, link, price, shop_name=self.SHOP_NAME)
 
@@ -87,7 +88,7 @@ class HyperRide(ShopPlugin):
     """The Shop Plugin for Hyper"""
 
     SEARCH_URL = "http://www.hyperride.co.nz/product/{query}/search#/?size=0"
-    SHOP_NAME = "Hyper"
+    SHOP_NAME = "Hyper Ride"
     LISTING_QUERY = "#productsSection .product_item"
 
     def create_listing(self, listing_html):
@@ -113,7 +114,7 @@ class BasementSkate(ShopPlugin):
 
     SEARCH_URL = "https://www.basementskate.com.au/search.php?"\
                  "mode=search&substring={query}&including=all&by_title=on"
-    SHOP_NAME = "BasementSkate"
+    SHOP_NAME = "Basement Skate"
 
     def search_shop(self, query):
         query = self.load_search_page(query)
@@ -130,7 +131,7 @@ class BasementSkate(ShopPlugin):
 
         name = title_el.text
         link = title_el.items()[0][1]
-        price = price_el.text_content()[1:]
+        price = "{} AUD".format(price_el.text_content()[1:])
 
         return Listing(name, link, price, self.SHOP_NAME)
 
@@ -141,7 +142,7 @@ class BasementSkate(ShopPlugin):
 class TerrabangSkate(ShopPlugin):
 
     SEARCH_URL = "http://terrabangskate.com/catalogsearch/result/?q={query}"
-    SHOP_NAME = "Terrabang"
+    SHOP_NAME = "Terrabang Skate Co"
 
     LISTING_QUERY = ".item"
 
@@ -152,7 +153,8 @@ class TerrabangSkate(ShopPlugin):
 
         price_el = recursive_class_find(listing_html, "price")[0]
 
-        price = price_el.text_content().strip()[3:]
+        price = "{} NZD".format(
+            price_el.text_content().strip()[3:])
         #price = "20.00"
 
         return Listing(name, link, price, self.SHOP_NAME)
