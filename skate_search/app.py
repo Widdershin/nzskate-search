@@ -1,10 +1,10 @@
 from flask import Flask, render_template, request
-from store_plugins import UltimateBoards, HyperRide
+from store_plugins import UltimateBoards, HyperRide, BasementSkate
 import json
 
 app = Flask(__name__)
 
-plugins = [UltimateBoards(), HyperRide()]
+plugins = [UltimateBoards(), HyperRide(), BasementSkate()]
 
 
 @app.route('/')

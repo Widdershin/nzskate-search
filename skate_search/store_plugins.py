@@ -109,6 +109,35 @@ class HyperRide(ShopPlugin):
     # TODO: Filter hyper results based on url
 
 
+class BasementSkate(ShopPlugin):
+
+    SEARCH_URL = "https://www.basementskate.com.au/search.php?"\
+                 "mode=search&substring={query}&including=all&by_title=on"
+    SHOP_NAME = "BasementSkate"
+
+    def search_shop(self, query):
+        query = self.load_search_page(query)
+
+        product_cells = query('.product-title')
+        prices = query('.currency')
+
+        raw_listings = zip(product_cells, prices)
+
+        return self.parse_result_html(raw_listings)
+
+    def create_listing(self, listing):
+        title_el, price_el = listing
+
+        name = title_el.text
+        link = title_el.items()[0][1]
+        price = price_el.text_content()[1:]
+
+        return Listing(name, link, price, self.SHOP_NAME)
+
+    def sanitize_query(self, query):
+        return query.replace(" ", "+")
+
+
 def recursive_class_find(element, search_class):
     children = element.getchildren()
 
