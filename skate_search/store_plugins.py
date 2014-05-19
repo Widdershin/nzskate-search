@@ -99,8 +99,6 @@ class HyperRide(ShopPlugin):
         return Listing(name, link, price, shop_name=self.SHOP_NAME)
 
     def sanitize_query(self, query):
-        print(query)
-        print(query.replace(" ", "%20"))
         return query.replace(" ", "%20")
 
     # TODO: Filter hyper results based on url
