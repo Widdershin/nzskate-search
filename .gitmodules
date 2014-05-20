@@ -1,0 +1,3 @@
+[submodule "skate_search/static/tablesaw"]
+	path = skate_search/static/tablesaw
+	url = https://github.com/filamentgroup/tablesaw.git
