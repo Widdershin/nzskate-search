@@ -3,6 +3,7 @@ from store_plugins import (UltimateBoards, HyperRide,
                            BasementSkate, TerrabangSkate)
 import json
 from fuzzywuzzy import fuzz
+from concurrent import futures
 
 app = Flask(__name__)
 
@@ -19,17 +20,19 @@ def search():
     query = request.args["query"]
 
     results = []
-    for plugin in plugins:
+
+    def search_shop(plugin):
         results.extend(plugin.search_shop(query))
+
+    with futures.ThreadPoolExecutor(max_workers=4) as pool:
+        for thing in pool.map(search_shop, plugins):
+            pass
 
     results = sorted(
         results,
         key=lambda x: fuzz.partial_ratio(query, x.name),
         reverse=True
     )
-
-    for listing in results:
-        print("{}: {}".format(listing.name.strip(), fuzz.partial_ratio(query, listing.name)))
 
     return json.dumps([listing.to_dict() for listing in results])
 
