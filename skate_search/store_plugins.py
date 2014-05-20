@@ -129,8 +129,11 @@ class BasementSkate(ShopPlugin):
     def create_listing(self, listing):
         title_el, price_el = listing
 
+        # import pudb; pu.db
+
         name = title_el.text
-        link = title_el.items()[0][1]
+        link = "https://www.basementskate.com.au{}".format(
+            title_el.items()[1][1])
         price = "{} AUD".format(price_el.text_content()[1:])
 
         return Listing(name, link, price, self.SHOP_NAME)

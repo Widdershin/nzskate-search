@@ -7,14 +7,18 @@ $(document).ready(function() {
         $.getJSON("/search", searchData, function(data) {
             $results = $("#results")
             $results.html("")
-            $results.append('<tr><th>Shop</th><th>Item</th><th>Price</th></tr>');
-            
+            $results.append('<thead id="resultsHeader"><tr><th data-sortable-col>Shop</th><th data-sortable-col>Item</th><th data-sortable-col>Price</th></tr></thead>');
+
+            $results.append('<tbody>');
             $.each(data, function(index, listing) {
                 // console.log(listing);
                 $results.append('<tr><td>'+listing.shop_name+'</td><td><a href="' + listing.url + '">' + listing.name + "</a></td><td>$" + listing.price + "</td></tr>");
             });
-
+            $results.append('</tbody>');
             // $("#results").html(data)
+            $.getScript("/static/tablesaw/dist/tablesaw.js", function () {
+                console.log("Success kid!");
+            });
         });
     });
 });

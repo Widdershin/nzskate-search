@@ -3,6 +3,10 @@
 <head>
     <title>NZ Skate Search</title>
     <script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+    <link rel="stylesheet" href="/static/tablesaw/bower_components/filament-dialog/dialog.css">
+    <link rel="stylesheet" href="/static/tablesaw/dist/tablesaw.css">
+    <script src="/static/tablesaw/bower_components/filament-dialog/dialog.js"></script>
+    <!-- <script src="/static/tablesaw/dist/tablesaw.js"></script> -->
     <script src="/static/app.js"></script>
 </head>
 <body>
@@ -12,9 +16,12 @@
         <input type="submit" value="Submit"  id="submit">
     </form>
 
+    <table data-sortable class="tablesaw" data-sortable-switch id="results">
+    </table>
+
     <!-- <ul id="results">
     </ul> -->
-    <table id="results" border="2" rules="all" cellpadding="3" style="border: 1px solid black; padding 5px">
+    <table data-sortable class="tablesaw">
     </table>
 </body>
 </html>
