@@ -4,6 +4,7 @@ from store_plugins import (UltimateBoards, HyperRide,
 import json
 from fuzzywuzzy import fuzz
 from concurrent import futures
+from operator import attrgetter
 
 app = Flask(__name__)
 
@@ -28,9 +29,12 @@ def search():
         for thing in pool.map(search_shop, plugins):
             pass
 
+    for result in results:
+        result.relevance = fuzz.partial_ratio(query, result.name)
+
     results = sorted(
         results,
-        key=lambda x: fuzz.partial_ratio(query, x.name),
+        key=attrgetter("relevance"),
         reverse=True
     )
 

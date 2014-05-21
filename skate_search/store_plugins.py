@@ -14,7 +14,8 @@ class Listing(object):
             "name": self.name,
             "url": self.link,
             "price": self.price,
-            "shop_name": self.shop_name
+            "shop_name": self.shop_name,
+            "relevance": self.relevance
         }
 
 
