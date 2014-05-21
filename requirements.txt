@@ -4,7 +4,7 @@ MarkupSafe==0.23
 Pygments==1.6
 Werkzeug==0.9.4
 cssselect==0.9.1
-fuzzywuzzy==0.2
+git+git://github.com/seatgeek/fuzzywuzzy.git
 gunicorn==18.0
 ipython==2.0.0
 itsdangerous==0.24
