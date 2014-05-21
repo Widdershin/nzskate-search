@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request
-from store_plugins import (UltimateBoards, HyperRide,
+from .store_plugins import (UltimateBoards, HyperRide,
                            BasementSkate, TerrabangSkate)
 import json
 from fuzzywuzzy import fuzz
