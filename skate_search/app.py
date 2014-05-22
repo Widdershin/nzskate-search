@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request
 from .store_plugins import (UltimateBoards, HyperRide,
-                           BasementSkate, TerrabangSkate)
+                            BasementSkate, TerrabangSkate,
+                            TheBoardroom)
 import json
 from fuzzywuzzy import fuzz
 from concurrent import futures
@@ -8,7 +9,13 @@ from operator import attrgetter
 
 app = Flask(__name__)
 
-plugins = [UltimateBoards(), HyperRide(), BasementSkate(), TerrabangSkate()]
+plugins = [
+    UltimateBoards(),
+    HyperRide(),
+    BasementSkate(),
+    TerrabangSkate(),
+    TheBoardroom()
+]
 
 
 @app.route('/')
@@ -25,7 +32,7 @@ def search():
     def search_shop(plugin):
         results.extend(plugin.search_shop(query))
 
-    with futures.ThreadPoolExecutor(max_workers=4) as pool:
+    with futures.ThreadPoolExecutor(max_workers=len(plugins)) as pool:
         for thing in pool.map(search_shop, plugins):
             pass
 

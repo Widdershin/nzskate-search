@@ -40,6 +40,8 @@ class ShopPlugin(object):
 
         results = self.parse_result_html(query(self.LISTING_QUERY))
 
+        print("{} results for {}. Searching with {}".format(len(results), self.SHOP_NAME, self.LISTING_QUERY))
+
         return results
 
     def parse_result_html(self, html):
@@ -165,6 +167,31 @@ class TerrabangSkate(ShopPlugin):
 
     def sanitize_query(self, query):
         return query.replace(" ", "+")
+
+
+class TheBoardroom(ShopPlugin):
+
+    SEARCH_URL = "http://www.theboardroom.co.nz/index.php?"\
+                 "route=product/search&filter_name={query}"
+    SHOP_NAME = "The Boardroom"
+
+    LISTING_QUERY = ".product-list > div"
+
+    def create_listing(self, listing_html):
+        price = recursive_class_find(
+            listing_html, "price")[0].text_content().strip()[1:]
+        name_el = recursive_class_find(
+            listing_html, "name")[0].getchildren()[0]
+
+        price = "{} NZD".format(price)
+
+        name = name_el.text
+        link = name_el.items()[0][1]
+
+        return Listing(name, link, price, self.SHOP_NAME)
+
+    def sanitize_query(self, query):
+        return query.replace(" ", "%20")
 
 
 def recursive_class_find(element, search_class):
