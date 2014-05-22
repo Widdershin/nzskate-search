@@ -30,7 +30,8 @@ def search():
             pass
 
     for result in results:
-        result.relevance = fuzz.partial_ratio(query, result.name)
+        result.relevance = fuzz.partial_ratio(query.lower(),
+                                              result.name.lower())
 
     results = sorted(
         results,
