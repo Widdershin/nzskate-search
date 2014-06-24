@@ -7,6 +7,8 @@ from fuzzywuzzy import fuzz
 from concurrent import futures
 from operator import attrgetter
 
+from urllib.error import URLError
+
 app = Flask(__name__)
 
 plugins = [
@@ -14,7 +16,6 @@ plugins = [
     HyperRide(),
     BasementSkate(),
     TerrabangSkate(),
-    TheBoardroom()
 ]
 
 
@@ -30,7 +31,10 @@ def search():
     results = []
 
     def search_shop(plugin):
-        results.extend(plugin.search_shop(query))
+        try:
+            results.extend(plugin.search_shop(query))
+        except URLError:
+            print('{} plugin crapped out.'.format(plugin.SHOP_NAME))
 
     with futures.ThreadPoolExecutor(max_workers=len(plugins)) as pool:
         for thing in pool.map(search_shop, plugins):
